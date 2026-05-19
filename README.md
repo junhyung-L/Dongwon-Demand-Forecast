@@ -66,9 +66,13 @@ graph TD
 - **Behavioral Realism**: Captured the complex interplay between marketing spend (Ad GRPs), distribution ramp-up, and consumer price sensitivity.
 - **Business Application**: This framework allows Dongwon to run scenarios (e.g., "What if we increase price by 10% and double ad spend?") before actual product launch.
 
-### ⚠️ Technical Notes & Limitations
-- **Model Performance**: The LightGBM model was trained on a sample of 12 rows (yielding R² ~0.0). This serves as a structural Proof-of-Concept. For production use, the scraper should be run at scale to gather larger training datasets.
-- **Simulation Scale**: The pipeline defaults to 400 personas for robust simulation, though cached results may show smaller batches used during testing to optimize API costs.
+### ⚖️ 3.1 Methodological Limitations & PoC Strategy
+- **12-Row Price Model Constraints**:
+  - Due to scraping search limits and structural IP blocking constraints on the Naver Shopping API, the LightGBM price intelligence model was trained on a highly limited dataset of 12 rows, resulting in an $R^2$ score of ~0.0 (structural underfitting).
+  - This underfitting is a deliberate architectural trade-off; the model's intent is to validate a **functional Proof-of-Concept (PoC) pipeline** integrating dynamic LLM Personas, Monte Carlo simulators, and list-price regressions, rather than deploying a finalized production pricing engine.
+  - To scale this system in production, a robust, proxy-rotating distributed web crawler can be deployed to scrape the target category dataset (exceeding 10k items), thereby resolving data sparsity and stabilizing price regressor weights.
+- **Simulation Cost Controls**:
+  - The pipeline natively supports an ensemble of 400 unique customer personas for stochastic simulation. However, to control Gemini and OpenAI API usage billing during iterative development and local debugging, local testing runs were executed using smaller, cached persona batches.
 
 ---
 
@@ -113,4 +117,4 @@ python forecast_pipeline.py make_submission --product_csv product_info.csv --use
 - **Junhyung L.** (Project Lead)
 
 ---
-*Refactored and polished to meet professional software engineering standards for the [Data Analyst Portfolio](https://github.com/junhyung-L/Resume/blob/main/Portfolio/README.md).*
+*Refactored and polished to meet professional software engineering standards for the [Data Analyst Portfolio](https://github.com/junhyung-L/Portfolio).*
